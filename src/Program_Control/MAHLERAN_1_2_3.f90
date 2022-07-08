@@ -1,6 +1,6 @@
 program MAHLERAN_1_2_3
 !
-!       Version 1.2.2 (started July 2022) - update veg components
+!       Version 1.2.3 (started July 2022) - update veg components
 !	Version 1.2.2 (March 2019) - bug fixes
 !	Version 1.2.1 (September 2015)
 !       John.Wainwright@durham.ac.uk
@@ -38,7 +38,8 @@ program MAHLERAN_1_2_3
 !       1.05 Addition of interstorm dynamics (soil moisture, evapotranspiration, veg dyn.)
 !       1.2.0 Version that shifts to use xml input file from GUSTAV interface and combines event, continuous and MiC versions into one structure           
 !       1.2.1 Adds modifications to concentrated_flow_transport and suspended_transport to allow density differences to be included specifically
-!       1.2.2 This version -- bug fixes to 1.2.1    
+!       1.2.2 bug fixes to 1.2.1    
+!       1.2.3 (started July 2022) - update veg components
 
 
 use shared_data
