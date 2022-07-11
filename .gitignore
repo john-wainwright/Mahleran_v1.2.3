@@ -27,7 +27,7 @@
 *.lib
 
 # Executables
-*.exe
+# to save current executable on github *.exe
 *.out
 *.app
 
