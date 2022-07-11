@@ -13,8 +13,8 @@ CND_BUILDDIR=build
 CND_DLIB_EXT=dll
 NBTMPDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mahleran_v1.2.3
-OUTPUT_BASENAME=mahleran_v1.2.3
+OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mahleran_v1.2.3.exe
+OUTPUT_BASENAME=mahleran_v1.2.3.exe
 PACKAGE_TOP_DIR=mahleranv1.2.3/
 
 # Functions

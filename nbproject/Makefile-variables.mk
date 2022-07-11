@@ -9,16 +9,16 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=MinGW64-Windows
 CND_ARTIFACT_DIR_Debug=dist/Debug/MinGW64-Windows
-CND_ARTIFACT_NAME_Debug=mahleran_v1.2.3
-CND_ARTIFACT_PATH_Debug=dist/Debug/MinGW64-Windows/mahleran_v1.2.3
+CND_ARTIFACT_NAME_Debug=mahleran_v1.2.3.exe
+CND_ARTIFACT_PATH_Debug=dist/Debug/MinGW64-Windows/mahleran_v1.2.3.exe
 CND_PACKAGE_DIR_Debug=dist/Debug/MinGW64-Windows/package
 CND_PACKAGE_NAME_Debug=mahleranv1.2.3.tar
 CND_PACKAGE_PATH_Debug=dist/Debug/MinGW64-Windows/package/mahleranv1.2.3.tar
 # Release configuration
 CND_PLATFORM_Release=MinGW64-Windows
 CND_ARTIFACT_DIR_Release=dist/Release/MinGW64-Windows
-CND_ARTIFACT_NAME_Release=mahleran_v1.2.3
-CND_ARTIFACT_PATH_Release=dist/Release/MinGW64-Windows/mahleran_v1.2.3
+CND_ARTIFACT_NAME_Release=mahleran_v1.2.3.exe
+CND_ARTIFACT_PATH_Release=dist/Release/MinGW64-Windows/mahleran_v1.2.3.exe
 CND_PACKAGE_DIR_Release=dist/Release/MinGW64-Windows/package
 CND_PACKAGE_NAME_Release=mahleranv1.2.3.tar
 CND_PACKAGE_PATH_Release=dist/Release/MinGW64-Windows/package/mahleranv1.2.3.tar

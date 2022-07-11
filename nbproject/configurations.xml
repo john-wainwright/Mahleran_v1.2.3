@@ -173,6 +173,10 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mahleran_v1.2.3.exe</output>
+          <commandLine>-static</commandLine>
+        </linkerTool>
       </compileType>
       <item path="src/Program_Control/MAHLERAN_1_2_3.f90"
             ex="false"
@@ -712,6 +716,10 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mahleran_v1.2.3.exe</output>
+          <commandLine>-static</commandLine>
+        </linkerTool>
       </compileType>
       <item path="src/Program_Control/MAHLERAN_1_2_3.f90"
             ex="false"

@@ -153,7 +153,7 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mahleran_v1.2.3.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.f} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mahleran_v1.2.3 ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.f} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mahleran_v1.2.3.exe ${OBJECTFILES} ${LDLIBSOPTIONS} -static
 
 ${OBJECTDIR}/src/Program_Control/MAHLERAN_1_2_3.o: src/Program_Control/MAHLERAN_1_2_3.f90 ${OBJECTDIR}/src/Program_Control/shared_data.o ${OBJECTDIR}/src/Program_Control/interstorm_shared_data.o ${OBJECTDIR}/src/Program_Control/parameters_from_xml.o ${OBJECTDIR}/src/Subroutines_Interstorm/time_h.o
 	${MKDIR} -p ${OBJECTDIR}/src/Program_Control
