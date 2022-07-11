@@ -65,7 +65,7 @@ call date_and_time (values = time_array)
 write (6, 9999) time_array (5), time_array (6), time_array (7), time_array (3), time_array (2), time_array (1)
 
 9999 format (' ---------------------------------------------------',/&
-            ' |               MAHLERAN  v1.2.2                  |',/&
+            ' |               MAHLERAN  v1.2.3                  |',/&
             ' |      code (c) J. Wainwright, E.N. Mueller,      |',/&
             ' |    L. Turnbull, R.E. Brazier, J.R. Cooper,      |',/&
             ' |       C.J.M. Hewett, B. Fenti, B. Tjetien       |',/&
