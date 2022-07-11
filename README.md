@@ -16,3 +16,5 @@ Eva N Müller EN, Britta Tietjen, Laura Turnbull, John Wainwright (submitted)
 Current executable version in: 
 Mahleran_v1.2.3/dist/Release/MinGW64-Windows/
 
+To run in standalone mode, copy the executable file from the above folder and put it in a separate folder on the computer, together with the mahleran_input.xml file, the Input folder with the appropriate input files, and make a new Output folder for the output.
+
