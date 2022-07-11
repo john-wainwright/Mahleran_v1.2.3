@@ -12,3 +12,7 @@ Marker-in-Cell version as described in JGR-ES (2012):
 Continuous version is described in:
 Eva N Müller EN, Britta Tietjen, Laura Turnbull, John Wainwright (submitted) 
 "Ecohydrological modelling of land degradation in drylands: feedbacks between water, erosion, vegetation and soil", Journal of Geophysical Research – Biogeosciences.         
+
+Current executable version in: 
+Mahleran_v1.2.3/dist/Release/MinGW64-Windows/
+
