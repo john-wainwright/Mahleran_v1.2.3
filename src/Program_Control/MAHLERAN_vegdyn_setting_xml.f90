@@ -41,7 +41,8 @@ if (ierr /= 0 ) stop "Memory error allocating disp in MAHLERAN_vegdyn_setting_xm
 ! initialize vegetation cover (as was read in in interstorm and storm sections)
 !JW Apr 2017 Implies hard coding as only shrub and grass cover included
 c_veg (1, 2, :, :) = shrub_cover (:, :) / 100.
-c_veg (1, 1, :, :) = cover (:, :) / 100. - shrub_cover (:, :) / 100.	!cover contains both the sum of shrub and grass cover
+!c_veg (1, 1, :, :) = cover (:, :) / 100. - shrub_cover (:, :) / 100.	!JW Oct22 cover contains surface type not vegetation cover
+c_veg (1, 1, :, :) = veg (:, :) / 100. - shrub_cover (:, :) / 100.	!veg contains both the sum of shrub and grass cover
 
 end
 

@@ -899,7 +899,7 @@ else
                 endif
             case ('wilting_point')   !wilting point for all species in m3/m3
                 if (no_species.eq.-9999) then
-                   stop "Number of species needs to be set before wilting point in read_interstorm_parameters_xml!" 
+                   stop "Number of species needs to be set before wilting point in read_parameters_from_xml_file!" 
                 endif
                 if (.not.endtag) then
                     write (ifile, *) 'Wilting point: ', trim (attribs (2, 1))
@@ -914,7 +914,7 @@ else
                 endif
             case ('potential_uptake_rate')   !Potential uptake rate per unit vegetation cover (mm/y)
                 if (no_species.eq.-9999) then
-                   stop "Number of species needs to be set before potential_uptake_rate in read_interstorm_parameters_xml!" 
+                   stop "Number of species needs to be set before potential_uptake_rate in read_parameters_from_xml_file!" 
                 endif
                 if (.not.endtag) then
                     write (ifile, *) 'Potential uptake rate per unit vegetation cover: ', trim (attribs (2, 1))
@@ -929,7 +929,7 @@ else
                 endif
             case ('root_fractions')  !!Fraction of grass and shrub roots in upper and lower layer (dimensionless)
                 if (no_species.eq.-9999) then
-                   stop "Number of species needs to be set before root_fractions in read_interstorm_parameters_xml!" 
+                   stop "Number of species needs to be set before root_fractions in read_parameters_from_xml_file!" 
                 endif
                 if (.not.endtag) then
                     write (ifile, *) 'Fraction of roots : ', trim (attribs (2, 1))
@@ -949,7 +949,7 @@ else
                 endif
             case ('potential_growth_rate')   !Potential growth rate of vegetation type in mm^-1 yr^-1
                 if (no_species.eq.-9999) then
-                   stop "Number of species needs to be set before potential_growth_rate in read_interstorm_parameters_xml!" 
+                   stop "Number of species needs to be set before potential_growth_rate in read_parameters_from_xml_file!" 
                 endif
                 if (.not.endtag) then
                     write (ifile, *) 'Potential growth rate of vegetation type in mm^-1 yr^-1: ', trim (attribs (2, 1))
@@ -964,7 +964,7 @@ else
                 endif
             case ('mortality_rate')   !mortality rate of vegetation due to water stress in mm^-1 yr^-1
                 if (no_species.eq.-9999) then
-                   stop "Number of species needs to be set before mortality_rate in read_interstorm_parameters_xml!" 
+                   stop "Number of species needs to be set before mortality_rate in read_parameters_from_xml_file!" 
                 endif
                 if (.not.endtag) then
                     write (ifile, *) 'Mortality rate of vegetation due to water stress in mm^-1 yr^-1: ', trim (attribs (2, 1))
@@ -979,7 +979,7 @@ else
                 endif
             case ('establishment_rate')   !rate of successful establishment of vegetation
                 if (no_species.eq.-9999) then
-                   stop "Number of species needs to be set before establishment_rate in read_interstorm_parameters_xml!" 
+                   stop "Number of species needs to be set before establishment_rate in read_parameters_from_xml_file!" 
                 endif
                 if (.not.endtag) then
                     write (ifile, *) 'Rate of successful establishment of vegetation: ', trim (attribs (2, 1))

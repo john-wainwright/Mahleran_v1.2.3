@@ -102,7 +102,7 @@ theta_min=0.03
 
 do i = 2, nr
    do j = 2, nc
-      grass_cover (i, j) = cover (i, j) - shrub_cover (i, j)		!grass cover in %
+      grass_cover (i, j) = veg (i, j) - shrub_cover (i, j)  !grass cover in % !JW Oct22 veg is vegetation cover, cover is surface type
       if (grass_cover (i, j).lt.0) then
          grass_cover (i, j) = 0.
       endif

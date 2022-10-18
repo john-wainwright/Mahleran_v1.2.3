@@ -71,12 +71,13 @@ endif
 grass_cover (:, :) = c_veg (2, 1, :, :) * 100.
 shrub_cover (:, :) = c_veg (2, 2, :, :) * 100.
 
-cover (:, :) = (c_veg (2, 1, :, :) + c_veg (2, 2, :, :)) * 100.
+!cover (:, :) = (c_veg (2, 1, :, :) + c_veg (2, 2, :, :)) * 100.  !JW Oct22 -- no, cover is integer cover *type* not vegetation cover
+veg (:, :) = (c_veg (2, 1, :, :) + c_veg (2, 2, :, :)) * 100. !JW Oct22 should be veg for feedback to erosion routines
 do i = 2, nr
    do j = 2, nc
       if (rmask (i, j).ge.0.0d0.and.t.ge.2005) then !JW Apr 2017 not clear why t>=2005 hard-coded here
-         if (cover (i, j).gt.100.) then
-            cover (i, j) = 100.		!overlap possible in veg routines
+         if (veg (i, j).gt.100.) then   !JW Oct22 change to veg from cover as above
+            veg (i, j) = 100.		!overlap possible in veg routines  !JW Oct22 change to veg from cover as above
          endif
       endif
    enddo
