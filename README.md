@@ -7,7 +7,7 @@ Model for Assessing Hillslope-Landscape Erosion, Runoff and Nutrients as describ
 
 
 Marker-in-Cell version as described in JGR-ES (2012):
-"A new approach for simulating the redistribution of soil particles by water erosion: a marker-in-cell model" by James Cooper, John Wainwright, Antony J Parsons, Yuichi Onda, Tomomi Fukuwara, Eichiro Obana, Ben Kitchener, Edward J Long and Graham H Hargrave, Journal of Geophysical Research – Earth Surface 117, F04027, doi:10.1029/2012JF002499         
+"A new approach for simulating the redistribution of soil particles by water erosion: a marker-in-cell model" by James Cooper, John Wainwright, Anthony J Parsons, Yuichi Onda, Tomomi Fukuwara, Eichiro Obana, Ben Kitchener, Edward J Long and Graham H Hargrave, Journal of Geophysical Research – Earth Surface 117, F04027, doi:10.1029/2012JF002499         
 
 Continuous version is described in:
 Eva N Müller EN, Britta Tietjen, Laura Turnbull, John Wainwright (submitted) 
@@ -17,4 +17,7 @@ Current executable version in:
 Mahleran_v1.2.3/dist/Release/MinGW64-Windows/
 
 To run in standalone mode, copy the executable file from the above folder and put it in a separate folder on the computer, together with the mahleran_input.xml file, the Input folder with the appropriate input files, and make a new Output folder for the output.
+
+To test the model is working correctly for you, please use the datasets in one of the following folders in Input: 
+Test2_Abbott_300700, Test_2_Wise_110801, input_p1, input_p2, input_p3, input_p4
 
