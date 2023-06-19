@@ -21,3 +21,4 @@ To run in standalone mode, copy the executable file from the above folder and pu
 To test the model is working correctly for you, please use the datasets in one of the following folders in Input: 
 Test2_Abbott_300700, Test_2_Wise_110801, input_p1, input_p2, input_p3, input_p4
 
+The MAHLERAN Manual is in the file MAHLERAN Manual 1_02_1.pdf and gives instructions on how to develop new datasets to run the model.
