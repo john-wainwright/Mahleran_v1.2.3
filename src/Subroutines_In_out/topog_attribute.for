@@ -177,7 +177,7 @@ c      equal to that of the adjacent cell
        nedge = 0
        do i = 2, nr
            do k = 2, nc
-               if ( rmask (i,k).gt.0.0d0 ) then
+               if ( rmask (i,k).ge.0.0d0 ) then
                    j = aspect (i, k)
                    i1 = sdir(j,1)
                    k1 = sdir(j,2)

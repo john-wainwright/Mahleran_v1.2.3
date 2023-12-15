@@ -128,10 +128,10 @@ do i = 2, nr
 !LTOct2007 added in particulate nutrients for each size class
 !
 !JW Apr 2017 should be able to simplify to single loop with condition:
-      if ((aspect (i, k).eq.1.and.rmask (i, k).gt.0.0d0.and.rmask (i - 1, k).lt.0.0d0).or. &
-          (aspect (i, k).eq.2.and.rmask (i, k).gt.0.0d0.and.rmask (i, k + 1).lt.0.0d0).or. &
-          (aspect (i, k).eq.3.and.rmask (i, k).gt.0.0d0.and.rmask (i + 1, k).lt.0.0d0).or. &
-          (aspect (i, k).eq.4.and.rmask (i, k).gt.0.0d0.and.rmask (i, k - 1).lt.0.0d0)) then
+      if ((aspect (i, k).eq.1.and.rmask (i, k).ge.0.0d0.and.rmask (i - 1, k).lt.0.0d0).or. &
+          (aspect (i, k).eq.2.and.rmask (i, k).ge.0.0d0.and.rmask (i, k + 1).lt.0.0d0).or. &
+          (aspect (i, k).eq.3.and.rmask (i, k).ge.0.0d0.and.rmask (i + 1, k).lt.0.0d0).or. &
+          (aspect (i, k).eq.4.and.rmask (i, k).ge.0.0d0.and.rmask (i, k - 1).lt.0.0d0)) then
          if (test) then
              write (6, *) i, k,  aspect (i, k)
          endif

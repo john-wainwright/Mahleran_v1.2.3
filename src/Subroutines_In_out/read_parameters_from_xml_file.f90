@@ -1295,6 +1295,11 @@ else
                     read (data (1), *) topog
                     write (ifile, *) 'topog: ', topog
                 endif
+            case ('tpond')            
+                if (.not.endtag) then
+                    read (data (1), *) tpondfileimg
+                    write (ifile, *) 'tpond: ', tpondfileimg
+                endif
             case ('v_xsect')           
                 if (.not.endtag) then
                     read (data (1), *) v_xsect

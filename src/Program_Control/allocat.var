@@ -172,3 +172,8 @@
 !
 	 allocate (qsedin (6,2, nr2, nc2), source = 0.0d0, stat = ierr)
          if ( ierr /= 0 ) stop "Memory error allocating qsedin!"
+!
+!JWDec2023 added to record time to ponding
+!
+         allocate (t_ponding (nr2, nc2), source = -9999, stat = ierr)
+         if ( ierr /= 0 ) stop "Memory error allocating t_ponding!"

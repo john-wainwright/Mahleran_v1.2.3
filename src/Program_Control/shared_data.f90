@@ -51,6 +51,7 @@ real :: q_plot
 real :: sed_plot
 
 integer*4, allocatable :: contrib (:,:) , cover (:,:)
+integer*4, allocatable :: t_ponding (:,:) 
 integer, allocatable :: x_hypoints (:), y_hypoints (:)
 integer, allocatable :: status_bl (:)	!cJCMay2011 for MiC
 
@@ -91,7 +92,7 @@ logical :: f_thetafileimg, f_nutrifileimg, f_qfileimg, f_aspectfileimg, f_dfilei
 f_vfileimg, f_sedfileimg, f_detfileimg, f_depfileimg, f_soildepfileimg, f_soilvelfileimg, &
 f_neterosimg, f_raindetimg, f_flowdetimg, f_p_nitrateimg, f_p_ammoniumimg,f_p_TNimg, &
 f_p_TPimg, f_p_ICimg,f_p_TCimg,	f_paramfile, f_ksat, f_pave, f_rainmask, f_topog, f_veg, &
-f_contrib, f_order, f_slope
+f_contrib, f_order, f_slope, f_tpondfileimg
 logical :: f_markerfileimg, f_markerofffile, f_mstatusfile, f_MXYfile, f_MXYfinalfile, f_dmapfile
 
 double precision ke, grav_propn, p_par

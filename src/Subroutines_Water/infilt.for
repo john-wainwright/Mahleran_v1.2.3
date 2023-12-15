@@ -65,8 +65,15 @@ c
 	              else
 	                 lambda = 0.16d0
                       endif
-   		      final_infilt = lambda  * (1 - 
-     &                               exp (-r2 (i, j) / lambda))
+c
+c  Addition in Strasbourg Dec 2023, to stop infiltration reducing to zero when rain is zero
+c
+                      if (r2 (i, 2).gt.0.0) then
+                          final_infilt = lambda  * (1 - 
+     &                                    exp (-r2 (i, j) / lambda))
+                      else
+                          final_infilt = ksat (i, j)
+                      endif
 		   endif
 cLTOCT2007 changed
 c		    c = (psi (i, j) + d (2, i, j)) * (theta_sat (iveg) -      to;
@@ -81,6 +88,12 @@ c		    c = (psi (i, j) + d (2, i, j)) * (theta_sat (iveg) -      to;
                    endif
 
                    water_in = r2 (i, j) + (d (1, i, j) / dt)
+c                   if (i.eq.40.and.j.eq.10) then
+c                       write (6, *) i,j, "water_in = ", water_in, 
+c     &                              "rain", r2 (i, j), "infilt=", f,
+c     &                              "final_infilt=", final_infilt,
+c     &                              "ksat=", ksat (i, j) 
+c                   endif
 c	Eva: drain is in [mm/s] at the moment, but it is being compared to cum_inf [mm]
 
 cLT_QUESTION Drain keeps water draining out of the soil to reduce soil moisture content during and between event.
@@ -93,6 +106,9 @@ cLTOct2007         drain = (theta (i, j) / theta_sat (iveg)) *      to;
                    if (f.ge.water_in) then
 c	complete runon occurs
 c   REB changed excess (i, j) = 0.
+c                      if (i.eq.40.and.j.eq.10) then
+c                          write (6, *) "complete runon occurs"
+c                      endif
                       excess (i, j) = 0.
                       d (1, i, j) = 0.
                       q (1, i, j) = 0.
@@ -107,6 +123,10 @@ c   REB changed excess (i, j) = 0.
 
 c   no runon occurs - infiltration totally satisfied by rainfall
                    elseif (f.le.r2 (i, j)) then
+c                      if (i.eq.40.and.j.eq.10) then
+c                          write (6, *) "infiltration totally satisfied",
+c     &                                 " by rainfall"
+c                      endif
                       excess (i, j) = r2 (i, j) - f
                       cum_inf (i, j) = cum_inf (i, j) + (f * dt)
                       if (cum_inf (i, j).ge.drain) then
@@ -119,6 +139,10 @@ c   no runon occurs - infiltration totally satisfied by rainfall
 cb  (i.e. if f < water_in and f > r2(i,j))
 c   partial runon - infiltration satisfied by rainfall and some runon
 		   else
+c                     if (i.eq.40.and.j.eq.10) then
+c                          write (6, *) "infiltration satisfied by ",
+c     &                                 "rainfall and some runon"
+c                      endif
                       excess (i, j) = 0.  
                       f1 = f - r2 (i, j)
                       d (1, i, j) = d (1, i, j) - (f1 * dt)
@@ -166,6 +190,10 @@ c	produces saturation-excess runoff
      &                             stmax (i, j)) / dt
 	           cum_inf (i, j) = stmax (i, j)
 	        endif
+                if (t_ponding (i, j).eq.-9999.and.
+     &              excess (i, j).gt.0.0d0) then
+                    t_ponding (i, j) = iter
+                endif
 
 c
 c	Updating of soil moisture

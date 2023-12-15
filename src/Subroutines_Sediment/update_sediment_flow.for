@@ -14,7 +14,7 @@ c****************************************************************
 	 dep_sum = 0.0d0
 	 do im = 1, nr2 
 	    do jm = 1, nc2
-	       if (rmask (im, jm).gt.0.0d0.and.iter.gt.1) then
+	       if (rmask (im, jm).ge.0.0d0.and.iter.gt.1) then
 c
 c   reset proportion (taking into account proportion at start of timestep, 
 c	detachment and deposition)

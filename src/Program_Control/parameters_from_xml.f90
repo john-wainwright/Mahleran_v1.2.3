@@ -174,6 +174,7 @@ logical :: soildepfileimg
 logical :: soilvelfileimg
 logical :: thetafileimg_xml
 logical :: topog
+logical :: tpondfileimg
 logical :: v_xsect
 logical :: veg_xml 
 logical :: vfileimg

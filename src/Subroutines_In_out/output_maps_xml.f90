@@ -38,7 +38,7 @@ logical :: fexist, exists
 character *180 thetafile_img, nutrifile_img, paramfile_name, qfile_img,  aspectfile_img, dfile_img, & 
                vfile_img, sedfile_img, detfile_img, depfile_img, soildepfile_img, soilvelfile_img, &
                neteros_img, raindet_img, flowdet_img, p_nitrate_img, p_ammonium_img, p_TN_img, &
-               p_TP_img, p_IC_img, p_TC_img, ksat_img
+               p_TP_img, p_IC_img, p_TC_img, ksat_img, tpond_img
 
 data ieighteen / 18 /   					
 
@@ -63,6 +63,7 @@ p_TP_img = output_folder (1:output_folder_length) // 'pTPxx001.asc'
 p_IC_img = output_folder (1:output_folder_length) // 'pICxx001.asc'
 p_TC_img = output_folder (1:output_folder_length) // 'pTCxx001.asc'
 ksat_img = output_folder (1:output_folder_length) // 'ksat_001.asc'
+tpond_img = output_folder (1:output_folder_length) // 'tpond001.asc'
 	
 paramfile_name = output_folder (1:output_folder_length) // 'param001.dat'
        
@@ -95,6 +96,7 @@ if (iout.lt.10) then
    write (p_IC_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
    write (p_TC_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
    write (ksat_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+   write (tpond_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
 elseif (iout.lt.100) then
    write (thetafile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
    write (nutrifile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
@@ -117,6 +119,7 @@ elseif (iout.lt.100) then
    write (p_IC_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
    write (p_TC_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
    write (ksat_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+   write (tpond_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
 elseif (iout.lt.1000) then
    write (thetafile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
    write (nutrifile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
@@ -139,6 +142,7 @@ elseif (iout.lt.1000) then
    write (p_IC_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
    write (p_TC_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
    write (ksat_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+   write (tpond_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
  endif
  if(f_thetafileimg) then
     open (11, file = thetafile_img, status = 'unknown')
@@ -244,6 +248,10 @@ if (f_p_TCimg) then
    open (36, file = p_TC_img, status = 'unknown')
    rewind (36)
 endif
+if (f_tpondfileimg) then
+    open (37, file = tpond_img, status = 'unknown')
+    rewind (37)
+endif
 !
 !   write .asc files
 !
@@ -279,7 +287,7 @@ enddo
 !JWMay2005
 !JWMay2005  write header lines
 !JWMay2005
-do i = 11, 30
+do i = 11, 37
    if (i.ne.18) then
       inquire (unit = i, opened = exists)
       if (exists) then
@@ -384,6 +392,13 @@ do i = 1, nr2
    if (f_p_TCimg) then
       write (36, 9993) (TC_tot (i,k), k = 1, nc2)     ! check units
    endif
+!
+!
+!   
+   if (f_tpondfileimg) then
+       write (37, 9992) (t_ponding (i,k), k = 1, nc2)
+   endif
+   
 enddo
 !
 !   Output parameter file
@@ -393,7 +408,7 @@ call echo_params_xml (ieighteen)
 !
 !  close file units for use next time
 !
-do i = 11, 36
+do i = 11, 37
    close (i)
 enddo
 

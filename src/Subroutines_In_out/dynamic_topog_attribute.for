@@ -91,7 +91,7 @@ c
 c            prevent oversteepening of edge cells by setting their slope
 c            equal to that of the adjacent cell
 c
-             if ( rmask (i, k).gt.0.0d0 ) then 
+             if ( rmask (i, k).ge.0.0d0 ) then 
                  j = aspect (i, k)
                  i1 = sdir(j,1)
                  k1 = sdir(j,2)

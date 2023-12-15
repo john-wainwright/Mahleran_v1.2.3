@@ -15,7 +15,7 @@ c                       qsedin(phi,1,im,jm): sediment inflow to current cell [mm
 
        do i = 2, nr
           do j = 2, nc
-	     if (rmask (i, j).le.0) then
+	     if (rmask (i, j).lt.0) then
 	        d (2, i, j) = 0.0d0
 	        q (2, i, j) = 0.0d0
 		do phi=1,6

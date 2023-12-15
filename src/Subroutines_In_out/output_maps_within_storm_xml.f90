@@ -28,7 +28,7 @@ implicit none
 double precision :: uc, uc1   ! variables used to convert units for output
 
 integer *4 :: ieighteen
-integer *4 :: minute_of_storm
+integer *4 :: minute_of_storm, second_of_storm
 
 integer :: i, k
 
@@ -41,105 +41,238 @@ write (6, *) ' In output_maps_within_storm_xml, iout = ', iout
 !
 !  templates of filenames
 !
-thetafile_img = output_folder (1:output_folder_length) // 'theta001_000min.asc'
-qfile_img = output_folder (1:output_folder_length) // 'dschg001_000min.asc'
-dfile_img = output_folder (1:output_folder_length) // 'depth001_000min.asc'
-vfile_img = output_folder (1:output_folder_length) // 'veloc001_000min.asc'
-sedfile_img = output_folder (1:output_folder_length) // 'sedtr001_000min.asc'
-detfile_img = output_folder (1:output_folder_length) // 'detac001_000min.asc'
-depfile_img = output_folder (1:output_folder_length) // 'depos001_000min.asc'
-soildepfile_img = output_folder (1:output_folder_length) // 'soild001_000min.asc'
-soilvelfile_img = output_folder (1:output_folder_length) // 'soilv001_000min.asc'
-neteros_img = output_folder (1:output_folder_length) // 'neter001_000min.asc'
-raindet_img = output_folder (1:output_folder_length) //  'radet001_000min.asc'
-flowdet_img = output_folder (1:output_folder_length) // 'fldet001_000min.asc'
+! if output is round number of minutes
+if (mod (int (within_storm_interval), 60).eq.0) then
+    thetafile_img = output_folder (1:output_folder_length) // 'theta001_000min.asc'
+    qfile_img = output_folder (1:output_folder_length) // 'dschg001_000min.asc'
+    dfile_img = output_folder (1:output_folder_length) // 'depth001_000min.asc'
+    vfile_img = output_folder (1:output_folder_length) // 'veloc001_000min.asc'
+    sedfile_img = output_folder (1:output_folder_length) // 'sedtr001_000min.asc'
+    detfile_img = output_folder (1:output_folder_length) // 'detac001_000min.asc'
+    depfile_img = output_folder (1:output_folder_length) // 'depos001_000min.asc'
+    soildepfile_img = output_folder (1:output_folder_length) // 'soild001_000min.asc'
+    soilvelfile_img = output_folder (1:output_folder_length) // 'soilv001_000min.asc'
+    neteros_img = output_folder (1:output_folder_length) // 'neter001_000min.asc'
+    raindet_img = output_folder (1:output_folder_length) //  'radet001_000min.asc'
+    flowdet_img = output_folder (1:output_folder_length) // 'fldet001_000min.asc'
 !
 !   set up files for output based on value of iout calculated at start of run
 !
-if (iout.lt.10) then
-   write (thetafile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
-   write (qfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
-   write (dfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
-   write (vfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
-   write (sedfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
-   write (detfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
-   write (depfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
-   write (soildepfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
-   write (soilvelfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
-   write (neteros_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
-   write (raindet_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
-   write (flowdet_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
-elseif (iout.lt.100) then
-   write (thetafile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
-   write (qfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
-   write (dfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
-   write (vfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
-   write (sedfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
-   write (detfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
-   write (depfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
-   write (soildepfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
-   write (soilvelfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
-   write (neteros_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
-   write (raindet_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
-   write (flowdet_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
-elseif (iout.lt.1000) then
-   write (thetafile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
-   write (qfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
-   write (dfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
-   write (vfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
-   write (sedfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
-   write (detfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
-   write (depfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
-   write (soildepfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
-   write (soilvelfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
-   write (neteros_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
-   write (raindet_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
-   write (flowdet_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
-endif
+    if (iout.lt.10) then
+        write (thetafile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (qfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (dfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (vfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (sedfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (detfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (depfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (soildepfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (soilvelfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (neteros_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (raindet_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (flowdet_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+    elseif (iout.lt.100) then
+        write (thetafile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (qfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (dfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (vfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (sedfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (detfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (depfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (soildepfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (soilvelfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (neteros_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (raindet_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (flowdet_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+    elseif (iout.lt.1000) then
+        write (thetafile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (qfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (dfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (vfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (sedfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (detfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (depfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (soildepfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (soilvelfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (neteros_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (raindet_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (flowdet_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+    endif
 !
 !  insert minute of run into filenames
 !
-minute_of_storm = (iter * dt) / 60
-write (6, *) ' Minute of storm: ', minute_of_storm
-if (minute_of_storm.lt.10) then
-   write (thetafile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
-   write (qfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
-   write (dfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
-   write (vfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
-   write (sedfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
-   write (detfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
-   write (depfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
-   write (soildepfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
-   write (soilvelfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
-   write (neteros_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
-   write (raindet_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
-   write (flowdet_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
-elseif (minute_of_storm.lt.100) then
-   write (thetafile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
-   write (qfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
-   write (dfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
-   write (vfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
-   write (sedfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
-   write (detfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
-   write (depfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
-   write (soildepfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
-   write (soilvelfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
-   write (neteros_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
-   write (raindet_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
-   write (flowdet_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
-elseif (minute_of_storm.lt.1000) then
-   write (thetafile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
-   write (qfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
-   write (dfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
-   write (vfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
-   write (sedfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
-   write (detfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
-   write (depfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
-   write (soildepfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
-   write (soilvelfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
-   write (neteros_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
-   write (raindet_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
-   write (flowdet_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
+    minute_of_storm = (iter * dt) / 60
+    write (6, *) ' Minute of storm: ', minute_of_storm
+    if (minute_of_storm.lt.10) then
+        write (thetafile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
+        write (qfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
+        write (dfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
+        write (vfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
+        write (sedfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
+        write (detfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
+        write (depfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
+        write (soildepfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
+        write (soilvelfile_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
+        write (neteros_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
+        write (raindet_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
+        write (flowdet_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
+    elseif (minute_of_storm.lt.100) then
+        write (thetafile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
+        write (qfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
+        write (dfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
+            write (vfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
+        write (sedfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
+        write (detfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
+        write (depfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
+        write (soildepfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
+        write (soilvelfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
+        write (neteros_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
+        write (raindet_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
+        write (flowdet_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
+    elseif (minute_of_storm.lt.1000) then
+        write (thetafile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
+        write (qfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
+        write (dfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
+        write (vfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
+        write (sedfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
+        write (detfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
+        write (depfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
+        write (soildepfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
+        write (soilvelfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
+        write (neteros_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
+        write (raindet_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
+        write (flowdet_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
+    endif
+!
+!output is at a number of seconds rather than minutes
+!
+else
+    thetafile_img = output_folder (1:output_folder_length) // 'theta001_00000sec.asc'
+    qfile_img = output_folder (1:output_folder_length) // 'dschg001_00000sec.asc'
+    dfile_img = output_folder (1:output_folder_length) // 'depth001_00000sec.asc'
+    vfile_img = output_folder (1:output_folder_length) // 'veloc001_00000sec.asc'
+    sedfile_img = output_folder (1:output_folder_length) // 'sedtr001_00000sec.asc'
+    detfile_img = output_folder (1:output_folder_length) // 'detac001_00000sec.asc'
+    depfile_img = output_folder (1:output_folder_length) // 'depos001_00000sec.asc'
+    soildepfile_img = output_folder (1:output_folder_length) // 'soild001_00000sec.asc'
+    soilvelfile_img = output_folder (1:output_folder_length) // 'soilv001_00000sec.asc'
+    neteros_img = output_folder (1:output_folder_length) // 'neter001_00000sec.asc'
+    raindet_img = output_folder (1:output_folder_length) //  'radet001_00000sec.asc'
+    flowdet_img = output_folder (1:output_folder_length) // 'fldet001_00000sec.asc'
+!
+!   set up files for output based on value of iout calculated at start of run
+!
+    if (iout.lt.10) then
+        write (thetafile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (qfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (dfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (vfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (sedfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (detfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (depfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (soildepfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (soilvelfile_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (neteros_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (raindet_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (flowdet_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+    elseif (iout.lt.100) then
+        write (thetafile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (qfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (dfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (vfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (sedfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (detfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (depfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (soildepfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (soilvelfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (neteros_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (raindet_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (flowdet_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+    elseif (iout.lt.1000) then
+        write (thetafile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (qfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (dfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (vfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (sedfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (detfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (depfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (soildepfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (soilvelfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (neteros_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (raindet_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (flowdet_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+    endif
+!
+!  insert second of run into filenames
+!
+    second_of_storm = int (iter * dt)
+    write (6, *) ' Second of storm: ', second_of_storm
+    if (second_of_storm.lt.10) then
+        write (thetafile_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
+        write (qfile_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
+        write (dfile_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
+        write (vfile_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
+        write (sedfile_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
+        write (detfile_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
+        write (depfile_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
+        write (soildepfile_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
+        write (soilvelfile_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
+        write (neteros_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
+        write (raindet_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
+        write (flowdet_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
+    elseif (second_of_storm.lt.100) then
+        write (thetafile_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
+        write (qfile_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
+        write (dfile_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
+        write (vfile_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
+        write (sedfile_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
+        write (detfile_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
+        write (depfile_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
+        write (soildepfile_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
+        write (soilvelfile_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
+        write (neteros_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
+        write (raindet_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
+        write (flowdet_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
+    elseif (second_of_storm.lt.1000) then
+        write (thetafile_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
+        write (qfile_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
+        write (dfile_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
+        write (vfile_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
+        write (sedfile_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
+        write (detfile_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
+        write (depfile_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
+        write (soildepfile_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
+        write (soilvelfile_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
+        write (neteros_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
+        write (raindet_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
+        write (flowdet_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
+    elseif (second_of_storm.lt.10000) then
+        write (thetafile_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
+        write (qfile_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
+        write (dfile_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
+        write (vfile_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
+        write (sedfile_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
+        write (detfile_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
+        write (depfile_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
+        write (soildepfile_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
+        write (soilvelfile_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
+        write (neteros_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
+        write (raindet_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
+        write (flowdet_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
+    elseif (second_of_storm.lt.100000) then
+        write (thetafile_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
+        write (qfile_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
+        write (dfile_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
+        write (vfile_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
+        write (sedfile_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
+        write (detfile_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
+        write (depfile_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
+        write (soildepfile_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
+        write (soilvelfile_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
+        write (neteros_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
+        write (raindet_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
+        write (flowdet_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
+    endif  
 endif
 !
 ! open files
@@ -197,10 +330,14 @@ uc1 = dx * dx * density * 1.e-6 * dt
 !
 do i = 1, nr2
    write (311, 9993) (theta (i, k), k = 1, nc2)
-   write (312, 9993) (qsum (i, k) * dx  * 1.e-9, k = 1, nc2)
-   write (313, 9993) (dmax (i, k), k = 1, nc2)
+   write (312, 9993) (q (2, i, k) * dx  * 1.e-9, k = 1, nc2)
+   write (313, 9993) (d (2, i, k), k = 1, nc2)
    write (314, 9993) (sed_tot (i, k) * uc, k = 1, nc2)
    write (315, 9993) ((detach_tot (i, k) - depos_tot (i, k)) * uc1, k = 1, nc2) 
+!   write (312, 9993) (qsum (i, k) * dx  * 1.e-9, k = 1, nc2)
+!   write (313, 9993) (dmax (i, k), k = 1, nc2)
+!   write (314, 9993) (sed_tot (i, k) * uc, k = 1, nc2)
+!   write (315, 9993) ((detach_tot (i, k) - depos_tot (i, k)) * uc1, k = 1, nc2) 
 !   write (316, 9993) (vmax (i, k), k = 1, nc2)
 !   write (317, 9993) (detach_tot (i, k) * uc1, k = 1, nc2) 
 !   write (319, 9993) (depos_tot (i, k) * uc1, k = 1, nc2) 

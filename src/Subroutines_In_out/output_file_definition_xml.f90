@@ -250,6 +250,11 @@ if (topog) then
 else
    f_topog = .FALSE.
 endif
+if (tpondfileimg) then
+   f_tpondfileimg = .TRUE.
+else
+   f_tpondfileimg = .FALSE.
+endif
 if (veg_xml) then
    f_veg = .TRUE.
 else

@@ -262,28 +262,28 @@ c
 c  prevent oversteepening of edge cells by setting their slope
 c     equal to that of the adjacent cell
 c
-	     if (aspect (i, j).eq.1.and.rmask (i,j).gt.0.0d0.and.
+	     if (aspect (i, j).eq.1.and.rmask (i,j).ge.0.0d0.and.
      &           rmask (i - 1, j).lt.0.0d0) then
 	        if (slope (i, j).gt.slope (i + 1, j).or.
      &              slope (i, j).eq.0.d0) then
                    slope (i, j) = slope (i + 1, j)
 	           nedge = nedge + 1
 	        endif
-	     elseif (aspect (i, j).eq.2.and.rmask (i,j).gt.0.0d0.
+                elseif (aspect (i, j).eq.2.and.rmask (i,j).ge.0.0d0.
      &               and.rmask (i, j + 1).lt.0.0d0) then
 	        if (slope (i, j).gt.slope (i, j - 1).or.
      &              slope (i, j).eq.0.d0) then
                    slope (i, j) = slope (i, j - 1)
 	           nedge = nedge + 1
 	        endif
-	     elseif (aspect (i, j).eq.3.and.rmask (i,j).gt.0.0d0.
+                elseif (aspect (i, j).eq.3.and.rmask (i,j).ge.0.0d0.
      &               and.rmask (i + 1, j).lt.0.0d0) then
 	        if (slope (i, j).gt.slope (i - 1, j).or.
      &              slope (i, j).eq.0.d0) then
                    slope (i, j) = slope (i - 1, j)
 	           nedge = nedge + 1
 	        endif
-	     elseif (aspect (i, j).eq.4.and.rmask (i,j).gt.0.0d0.
+                elseif (aspect (i, j).eq.4.and.rmask (i,j).ge.0.0d0.
      &               and.rmask (i, j - 1).lt.0.0d0) then
 	        if (slope (i, j).gt.slope (i, j + 1).or.
      &              slope (i, j).eq.0.d0) then
