@@ -7,13 +7,13 @@
   <input_folder value=".\Input\input_p1\" />
   <output_folder value=".\Output\" />
   <dem value="p1dem.asc" />
-  <rainfall_data value="p1_01_08_06.dat" />
+  <rainfall_data value="CSNV_29092022.dat" />
   <rainfall-scaling_map value="rm_new.asc" />
   <vegetation-cover_map value="p1vegcover.asc" />
   <pavement_map value="p1pavcoverveg.asc" />
   <surface-type_map value="p1_surface_type.asc" />
   <rain_type value="2" />
-  <stormlength value="1630.0" />
+  <stormlength value="5400.0" />
   <mean_rainfall value="138.1068" />
   <std_dev_rainfall value="0.0" />
   <skewness_rainfall value="0.0" />
@@ -64,8 +64,8 @@
   <initialSoilMoistureDistribution value="deterministic" />
   <saturatedSoilMoistureDistribution value="deterministic" />
   <flow_direction value="4" />
-  <flow-routing_solution_method value="1" />
-  <friction_factor_type value="1" />
+  <flow-routing_solution_method value="2" />
+  <friction_factor_type value="8" />
   <friction_factor_map value="" />
   <friction_factor_mean values="by_surface_type">
     <type_1>21.45</type_1>

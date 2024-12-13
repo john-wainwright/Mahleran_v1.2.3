@@ -137,6 +137,7 @@
                      projectFiles="true">
         <itemPath>src/Subroutines_Water/accumulate_flow.for</itemPath>
         <itemPath>src/Subroutines_Water/downslope_vars.for</itemPath>
+        <itemPath>src/Subroutines_Water/ff_type8.for</itemPath>
         <itemPath>src/Subroutines_Water/infilt.for</itemPath>
         <itemPath>src/Subroutines_Water/route_water.for</itemPath>
         <itemPath>src/Subroutines_Water/update_water_flow.for</itemPath>
@@ -168,7 +169,7 @@
   <confs>
     <conf name="Debug" type="1">
       <toolsSet>
-        <compilerSet>MinGW64|MinGW</compilerSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -684,6 +685,8 @@
             tool="2"
             flavor2="0">
       </item>
+      <item path="src/Subroutines_Water/ff_type8.for" ex="false" tool="2" flavor2="0">
+      </item>
       <item path="src/Subroutines_Water/infilt.for" ex="false" tool="2" flavor2="0">
       </item>
       <item path="src/Subroutines_Water/route_water.for"
@@ -699,7 +702,7 @@
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
-        <compilerSet>MinGW64|MinGW</compilerSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -1226,6 +1229,8 @@
             ex="false"
             tool="2"
             flavor2="0">
+      </item>
+      <item path="src/Subroutines_Water/ff_type8.for" ex="false" tool="2" flavor2="0">
       </item>
       <item path="src/Subroutines_Water/infilt.for" ex="false" tool="2" flavor2="0">
       </item>

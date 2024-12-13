@@ -465,8 +465,9 @@ else
       enddo
    endif   
 endif
-write (6, *) 'Now here'
+
 if (use_suction_map) then
+    write (6, *) 'Reading in suction map: ', suction_map
     filename = input_folder (1:input_folder_length) // suction_map
     call read_spatial_data (filename, psi, n_cols, n_rows, xllcorner, yllcorner, cellsize, nodata_value)
     write (6, *) ' Suction map data read in from file: ', filename
@@ -513,7 +514,9 @@ else
       enddo
    endif
 endif
+
 if (use_drainage_map) then
+    write (6, *) 'Reading in drainage map: ', drainage_map_map
     filename = input_folder (1:input_folder_length) // drainage_map_map
     call read_spatial_data (filename, drain_par, n_cols, n_rows, xllcorner, yllcorner, cellsize, nodata_value)
     write (6, *) ' Drainage map data read in from file: ', filename
@@ -550,7 +553,9 @@ else
       write (6, *) ' Drainage data parameterized using surface cover'
    endif
 endif
-if (use_friction_factor_map.or.friction_factor_type.eq.8) then
+
+if (use_friction_factor_map.or.ff_type.eq.9) then
+   write (6, *) 'Reading in friction factor map: ', friction_factor_map
    filename = input_folder (1:input_folder_length) // friction_factor_map
    call read_spatial_data (filename, ff, n_cols, n_rows, xllcorner, yllcorner, cellsize, nodata_value)
    write (6, *) ' Friction factor map data read in from file: ', filename
@@ -670,8 +675,20 @@ else
             ff (i, k) = 1.202d0 * dg ** 1.383d0
          enddo
       enddo
-!    elseif (ff_type.eq.8) then
-! already covered above
+   elseif (ff_type.eq.8) then
+!
+!   dynamic versions -- initialize
+!
+      do i = 1, n_rows - 1
+         do k = 1, n_cols - 1
+            ff (i, k) = 14.d0
+         enddo
+      enddo
+   else
+!
+!  throw error if ff_type is not between 1 and 9 (9 is covered above)
+!
+       write (6, *) "ERROR -- unknown friction factor type: ", ff_type
    endif
 endif
 !
@@ -686,6 +703,7 @@ if (verbose_output) then
 endif
 
 if (use_initial_soil_moisture_map) then
+    write (6, *) 'Reading in initial soil moisture map: ', initial_soil_moisture_map
     filename = input_folder (1:input_folder_length) // initial_soil_moisture_map
     call read_spatial_data (filename, theta_0, n_cols, n_rows, xllcorner, yllcorner, cellsize, nodata_value)
     write (6, *) ' Initial soil-moisture map data read in from file: ', filename
@@ -716,6 +734,7 @@ else
    write (6, *) ' Initial soil-moisture data parameterized using surface cover'
 endif
 if (use_saturated_soil_moisture_map) then
+    write (6, *) 'Reading in saturated soil moisture map: ', saturated_soil_moisture_map
     filename = input_folder (1:input_folder_length) // saturated_soil_moisture_map
     call read_spatial_data (filename, theta_sat, n_cols, n_rows, xllcorner, yllcorner, cellsize, nodata_value)
     write (6, *) ' Saturated soil-moisture map data read in from file: ', filename

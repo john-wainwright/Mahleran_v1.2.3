@@ -7,13 +7,13 @@
  Input folder: .\Input\input_p1\                                                                                   
  Output folder: .\Output\                                                                                           
  DEM file: p1dem.asc                                                                       
- Rainfall data: p1_01_08_06.dat                                                                 
+ Rainfall data: CSNV_29092022.dat                                                               
  Rainfall-scaling map: rm_new.asc                                                                      
  Vegetation-cover map: p1vegcover.asc                                                                  
  Pavement map: p1pavcoverveg.asc                                                               
  Surface-type map: p1_surface_type.asc                                                             
  Rain_type:            2
- Stormlength:    1630.0000000000000     
+ Stormlength:    5400.0000000000000     
  Mean_rainfall:    138.10679999999999     
  Std_dev_rainfall:    0.0000000000000000     
  Skewness_rainfall:    0.0000000000000000     
@@ -64,8 +64,8 @@
  Initial_soil_moisture_distribution: deterministic
  Saturated_soil_moisture_distribution: deterministic
  Flow_direction:            4
- flow-routing_solution_method:            1
- Friction_factor_type:            1
+ flow-routing_solution_method:            2
+ Friction_factor_type:            8
  Friction_factor_map:                                                                                 
  Friction factor mean: by_surface_type
  Type            1 :    21.449999999999999     

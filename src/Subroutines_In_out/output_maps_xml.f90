@@ -38,7 +38,7 @@ logical :: fexist, exists
 character *180 thetafile_img, nutrifile_img, paramfile_name, qfile_img,  aspectfile_img, dfile_img, & 
                vfile_img, sedfile_img, detfile_img, depfile_img, soildepfile_img, soilvelfile_img, &
                neteros_img, raindet_img, flowdet_img, p_nitrate_img, p_ammonium_img, p_TN_img, &
-               p_TP_img, p_IC_img, p_TC_img, ksat_img, tpond_img
+               p_TP_img, p_IC_img, p_TC_img, ksat_img, tpond_img, topog_img
 
 data ieighteen / 18 /   					
 
@@ -64,6 +64,7 @@ p_IC_img = output_folder (1:output_folder_length) // 'pICxx001.asc'
 p_TC_img = output_folder (1:output_folder_length) // 'pTCxx001.asc'
 ksat_img = output_folder (1:output_folder_length) // 'ksat_001.asc'
 tpond_img = output_folder (1:output_folder_length) // 'tpond001.asc'
+topog_img = output_folder (1:output_folder_length) // 'topog001.asc'
 	
 paramfile_name = output_folder (1:output_folder_length) // 'param001.dat'
        
@@ -97,6 +98,7 @@ if (iout.lt.10) then
    write (p_TC_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
    write (ksat_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
    write (tpond_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+   write (topog_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
 elseif (iout.lt.100) then
    write (thetafile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
    write (nutrifile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
@@ -120,6 +122,7 @@ elseif (iout.lt.100) then
    write (p_TC_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
    write (ksat_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
    write (tpond_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+   write (topog_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
 elseif (iout.lt.1000) then
    write (thetafile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
    write (nutrifile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
@@ -143,7 +146,8 @@ elseif (iout.lt.1000) then
    write (p_TC_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
    write (ksat_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
    write (tpond_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
- endif
+   write (topog_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+endif
  if(f_thetafileimg) then
     open (11, file = thetafile_img, status = 'unknown')
     rewind (11)
@@ -189,7 +193,7 @@ if (f_rainmask) then
    rewind (21)
 endif
 if (f_topog) then
-   open (22, file = output_folder (1:output_folder_length) // 'topog.asc', status = 'unknown')
+   open (22, file = topog_img, status = 'unknown')
    rewind (22)
 endif
 if (f_veg) then

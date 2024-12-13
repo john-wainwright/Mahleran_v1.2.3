@@ -105,10 +105,10 @@ write (6, *) ' back from initializing random-number generator'
 call read_parameters_from_xml_file (fname)
         
 write (6, *) ' back from reading parameters'
-if (model_version.ne.'1.2.2') then
+if (model_version.ne.'1.2.3') then
     write (*, *)
     write (*, *)'******************************************************************************************************'
-    write (6, *) ' Warning: this is MAHLERAN v.1.2.2, whereas input file is prepared for model version ', model_version
+    write (6, *) ' Warning: this is MAHLERAN v.1.2.3, whereas input file is prepared for model version ', model_version
     write (*, *)'******************************************************************************************************'
     write (*, *)
 endif

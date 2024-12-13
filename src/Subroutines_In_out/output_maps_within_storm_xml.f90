@@ -35,7 +35,8 @@ integer :: i, k
 logical :: fexist, exists
 
 character *180 thetafile_img, qfile_img, dfile_img, vfile_img, sedfile_img, detfile_img, &
-      depfile_img, soildepfile_img, soilvelfile_img, neteros_img, raindet_img, flowdet_img
+      depfile_img, soildepfile_img, soilvelfile_img, neteros_img, raindet_img, flowdet_img, &
+      topog_img
 
 write (6, *) ' In output_maps_within_storm_xml, iout = ', iout      
 !
@@ -55,6 +56,7 @@ if (mod (int (within_storm_interval), 60).eq.0) then
     neteros_img = output_folder (1:output_folder_length) // 'neter001_000min.asc'
     raindet_img = output_folder (1:output_folder_length) //  'radet001_000min.asc'
     flowdet_img = output_folder (1:output_folder_length) // 'fldet001_000min.asc'
+    topog_img =  output_folder (1:output_folder_length) // 'topog001_000min.asc'
 !
 !   set up files for output based on value of iout calculated at start of run
 !
@@ -71,6 +73,7 @@ if (mod (int (within_storm_interval), 60).eq.0) then
         write (neteros_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
         write (raindet_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
         write (flowdet_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (topog_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
     elseif (iout.lt.100) then
         write (thetafile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
         write (qfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
@@ -84,6 +87,7 @@ if (mod (int (within_storm_interval), 60).eq.0) then
         write (neteros_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
         write (raindet_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
         write (flowdet_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (topog_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
     elseif (iout.lt.1000) then
         write (thetafile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
         write (qfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
@@ -97,6 +101,7 @@ if (mod (int (within_storm_interval), 60).eq.0) then
         write (neteros_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
         write (raindet_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
         write (flowdet_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (topog_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
     endif
 !
 !  insert minute of run into filenames
@@ -116,11 +121,12 @@ if (mod (int (within_storm_interval), 60).eq.0) then
         write (neteros_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
         write (raindet_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
         write (flowdet_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
+        write (topog_img (12 + output_folder_length:12 + output_folder_length), '(i1)') minute_of_storm
     elseif (minute_of_storm.lt.100) then
         write (thetafile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
         write (qfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
         write (dfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
-            write (vfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
+        write (vfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
         write (sedfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
         write (detfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
         write (depfile_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
@@ -129,6 +135,7 @@ if (mod (int (within_storm_interval), 60).eq.0) then
         write (neteros_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
         write (raindet_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
         write (flowdet_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
+        write (topog_img (11 + output_folder_length:12 + output_folder_length), '(i2)') minute_of_storm
     elseif (minute_of_storm.lt.1000) then
         write (thetafile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
         write (qfile_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
@@ -142,6 +149,7 @@ if (mod (int (within_storm_interval), 60).eq.0) then
         write (neteros_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
         write (raindet_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
         write (flowdet_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
+        write (topog_img (10 + output_folder_length:12 + output_folder_length), '(i3)') minute_of_storm
     endif
 !
 !output is at a number of seconds rather than minutes
@@ -159,6 +167,7 @@ else
     neteros_img = output_folder (1:output_folder_length) // 'neter001_00000sec.asc'
     raindet_img = output_folder (1:output_folder_length) //  'radet001_00000sec.asc'
     flowdet_img = output_folder (1:output_folder_length) // 'fldet001_00000sec.asc'
+    topog_img = output_folder (1:output_folder_length) // 'topog001_00000sec.asc'
 !
 !   set up files for output based on value of iout calculated at start of run
 !
@@ -175,6 +184,7 @@ else
         write (neteros_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
         write (raindet_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
         write (flowdet_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
+        write (topog_img (8 + output_folder_length:8 + output_folder_length), '(i1)') iout
     elseif (iout.lt.100) then
         write (thetafile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
         write (qfile_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
@@ -188,6 +198,7 @@ else
         write (neteros_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
         write (raindet_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
         write (flowdet_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
+        write (topog_img (7 + output_folder_length:8 + output_folder_length), '(i2)') iout
     elseif (iout.lt.1000) then
         write (thetafile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
         write (qfile_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
@@ -201,6 +212,7 @@ else
         write (neteros_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
         write (raindet_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
         write (flowdet_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
+        write (topog_img (6 + output_folder_length:8 + output_folder_length), '(i3)') iout
     endif
 !
 !  insert second of run into filenames
@@ -220,6 +232,7 @@ else
         write (neteros_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
         write (raindet_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
         write (flowdet_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
+        write (topog_img (14 + output_folder_length:14 + output_folder_length), '(i1)') second_of_storm
     elseif (second_of_storm.lt.100) then
         write (thetafile_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
         write (qfile_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
@@ -233,6 +246,7 @@ else
         write (neteros_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
         write (raindet_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
         write (flowdet_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
+        write (topog_img (13 + output_folder_length:14 + output_folder_length), '(i2)') second_of_storm
     elseif (second_of_storm.lt.1000) then
         write (thetafile_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
         write (qfile_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
@@ -246,6 +260,7 @@ else
         write (neteros_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
         write (raindet_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
         write (flowdet_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
+        write (topog_img (12 + output_folder_length:14 + output_folder_length), '(i3)') second_of_storm
     elseif (second_of_storm.lt.10000) then
         write (thetafile_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
         write (qfile_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
@@ -259,6 +274,7 @@ else
         write (neteros_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
         write (raindet_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
         write (flowdet_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
+        write (topog_img (11 + output_folder_length:14 + output_folder_length), '(i4)') second_of_storm
     elseif (second_of_storm.lt.100000) then
         write (thetafile_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
         write (qfile_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
@@ -272,6 +288,7 @@ else
         write (neteros_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
         write (raindet_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
         write (flowdet_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
+        write (topog_img (10 + output_folder_length:14 + output_folder_length), '(i5)') second_of_storm
     endif  
 endif
 !
@@ -305,11 +322,13 @@ rewind (315)
 !rewind (321)
 !open (322, file = flowdet_img, status = 'unknown')
 !rewind (322)
+open (323, file = topog_img, status = 'unknown')
+rewind (323)
 !
 ! write header lines
 ! 
 !do i = 311, 322
-do i = 311, 315
+do i = 311, 323
    inquire (unit = i, opened = exists)
    if (exists) then
       write (i, 9999) nc2
@@ -345,13 +364,17 @@ do i = 1, nr2
 !   write (320, 9993) (vmax_soil (i, k), k = 1, nc2) 
 !   write (321, 9993) (raindrop_detach_tot (i, k) * uc1,  k = 1, nc2) 
 !   write (322, 9993) (flow_detach_tot (i, k) * uc1, k = 1, nc2) 
+   write (323, 9993) (z (i, k), k = 1, nc2)
 enddo
 !
 !   output finished, close files
 !
-do i = 311, 315
+do i = 311, 323
 !do i = 311, 322
-   close (i)
+   inquire (unit = i, opened = exists)
+   if (exists) then
+      close (i)
+   endif
 enddo
 
 9999   format ('ncols ', i6)

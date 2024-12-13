@@ -21,7 +21,7 @@ FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=MinGW64-Windows
+CND_PLATFORM=MinGW-Windows
 CND_DLIB_EXT=dll
 CND_CONF=Debug
 CND_DISTDIR=dist
@@ -126,6 +126,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Subroutines_Vegetation/veg_dyn.o \
 	${OBJECTDIR}/src/Subroutines_Water/accumulate_flow.o \
 	${OBJECTDIR}/src/Subroutines_Water/downslope_vars.o \
+	${OBJECTDIR}/src/Subroutines_Water/ff_type8.o \
 	${OBJECTDIR}/src/Subroutines_Water/infilt.o \
 	${OBJECTDIR}/src/Subroutines_Water/route_water.o \
 	${OBJECTDIR}/src/Subroutines_Water/update_water_flow.o
@@ -519,6 +520,10 @@ ${OBJECTDIR}/src/Subroutines_Water/accumulate_flow.o: src/Subroutines_Water/accu
 ${OBJECTDIR}/src/Subroutines_Water/downslope_vars.o: src/Subroutines_Water/downslope_vars.for
 	${MKDIR} -p ${OBJECTDIR}/src/Subroutines_Water
 	$(COMPILE.f) -g -o ${OBJECTDIR}/src/Subroutines_Water/downslope_vars.o src/Subroutines_Water/downslope_vars.for
+
+${OBJECTDIR}/src/Subroutines_Water/ff_type8.o: src/Subroutines_Water/ff_type8.for
+	${MKDIR} -p ${OBJECTDIR}/src/Subroutines_Water
+	$(COMPILE.f) -g -o ${OBJECTDIR}/src/Subroutines_Water/ff_type8.o src/Subroutines_Water/ff_type8.for
 
 ${OBJECTDIR}/src/Subroutines_Water/infilt.o: src/Subroutines_Water/infilt.for
 	${MKDIR} -p ${OBJECTDIR}/src/Subroutines_Water

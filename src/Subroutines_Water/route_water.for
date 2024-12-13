@@ -160,6 +160,23 @@ c
 	             else
 		            ff (i, j) = 1.202d0 * dg ** 1.383d0 
 	             endif
+                elseif (ff_type.eq.8) then
+                    dnew = d (2, i, j)
+                    if (dnew.gt.0.0d0) then
+c                       write(6, 801) dnew, i, j
+c                       write(6, 802) phi, i, j, sed_propn (phi, i, j) 
+                        
+                        call ff_type8( i, j, ff (i, j), dnew )
+c                       write(6, 800) ff(i, j), d (2, i, j)
+                        
+ 802   format('(a) sed_propn (',i2,',',i2,',',i2,') = ',e14.8 )                       
+ 801   format('(a) dnew = ',e14.8,' i = ',i2,' j = ',i2)                        
+ 800   format('friction factor = ',e14.8,' depth =',e14.8)
+
+                    else
+                        ff(i,j) = 0.5
+                    endif
+                         
                 endif
 	          
                 v (i, j) = sqrt ((gfconst * d (2, i, j) * slope (i, j))
@@ -428,7 +445,8 @@ c **** CJMH - need to check that this should be qin ((2, i, j) here:
      &                                    dg ** 1.383d0       
                            endif   
                            coeff1 = cn1 / sqrt( ff (i, j) )
-                        endif
+
+                           endif
 c --------------------  end of if statement for friction factor type (updates coeff1)
                              
                         icount = icount + 1
@@ -789,6 +807,20 @@ c     &                      dlow * slope (i, j)) / fflow)) / dx))
 c                      flow = dlow - cnconst * cn1 
 c                      cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *  
 c     &                      dmid * slope (i, j)) / ffmid)) / dx))  
+c --------------------- friction factor type 8
+                     elseif (ff_type.eq.8) then
+c                       if (dnew.gt.0) then
+                            call ff_type8( i, j, ff (i, j), dnew)
+c                            write( 6, *) 'ff = ',ff(i,j)
+                            if ( ff (i, j).le.0.0d0 ) then
+                                 write(6,*)'Error ff =',ff (i, j)
+                                 stop
+                            endif
+c                       else
+c                          ff(i, j) = 0.5
+c                       endif
+                        coeff1 = cn1 / sqrt( ff (i, j) )
+c                     endif
 c      
 c ------------------ friction factor not dynamic 
 	             else
@@ -1096,29 +1128,32 @@ cJWFeb05   add in dynamic ff effects
 c
 c  ff = 1.202 Dg^1.383 Q^-0.317 
 c
-	                if (sed_propn (5, i, j).gt.0.0d0.or.
+	              if (sed_propn (5, i, j).gt.0.0d0.or.
      &                    sed_propn (6, i, j).gt.0.0d0) then
-  	                   if (sed_propn (5, i, j).gt.sed_propn (6, i, j)) 
+  	                  if (sed_propn (5, i, j).gt.sed_propn (6, i, j)) 
      &				   then
-	                      dg = 2.0d0 + 10.0d0 * (sed_propn (5, i, j) / 
+	                     dg = 2.0d0 + 10.0d0 * (sed_propn (5, i, j) / 
      &                           (sed_propn (5, i, j) + 
      &                            sed_propn (6, i, j)))
-	                   else
-	                      dg = 12.0d0 + (20.0d0 * sed_propn (6, i, j))
-	                   endif
-	                else
-	                   dg = 2.0d0
-	                endif
-	                fflow = 1.202d0 * dg ** 1.383d0 * 
-     &                            (dlow * v (i, j) * dx) ** (-0.317d0)
-	                ffmid = 1.202d0 * dg ** 1.383d0 * 
-     &                            (dmid * v (i, j) * dx) ** (-0.317d0)
+	                  else
+	                     dg = 12.0d0 + (20.0d0 * sed_propn (6, i, j))
+	                  endif
+	              else
+	                  dg = 2.0d0
+	              endif
+	              fflow = 1.202d0 * dg ** 1.383d0 * 
+     &                        (dlow * v (i, j) * dx) ** (-0.317d0)
+	              ffmid = 1.202d0 * dg ** 1.383d0 * 
+     &                        (dmid * v (i, j) * dx) ** (-0.317d0)
                       cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst * 
      &                      dlow * slope (i, j)) / fflow)) / dx))
                       flow = dlow - cnconst * cn1 
                       cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *  
      &                      dmid * slope (i, j)) / ffmid)) / dx))
-	             else
+!
+!  Need to add code here for ff_type = 8 and bisection method
+!
+	           else
                       cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *  
      &                      dlow * slope (i, j)) / ff (i, j))) / dx))
                       flow = dlow - cnconst * cn1 
