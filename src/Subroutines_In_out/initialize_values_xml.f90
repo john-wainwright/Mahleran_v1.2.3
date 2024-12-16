@@ -137,6 +137,7 @@ bagnold_density_scale = (excess_density / 1650.) ** (-0.5)
 hz = active_layer_sensitivity
 if (update_topography_xml.eq.'y'.or.update_topography_xml.eq.'Y') then
    update_topography = .TRUE.
+   nt_top_up = topography_update_interval
 else
    update_topography = .FALSE.
 endif
