@@ -445,8 +445,17 @@ c **** CJMH - need to check that this should be qin ((2, i, j) here:
      &                                    dg ** 1.383d0       
                            endif   
                            coeff1 = cn1 / sqrt( ff (i, j) )
-
+c --------------------- friction factor type 8
+                        elseif (ff_type.eq.8) then
+                           call ff_type8( i, j, ff (i, j), dnew)
+c                               write( 6, *) 'ff = ',ff(i,j)
+                           if ( ff (i, j).le.0.0d0 ) then
+                               write(6,*)'Error ff =',ff (i, j)
+                               stop
                            endif
+                           coeff1 = cn1 / sqrt( ff (i, j) )
+
+                        endif
 c --------------------  end of if statement for friction factor type (updates coeff1)
                              
                         icount = icount + 1
@@ -809,18 +818,8 @@ c                      cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *
 c     &                      dmid * slope (i, j)) / ffmid)) / dx))  
 c --------------------- friction factor type 8
                      elseif (ff_type.eq.8) then
-c                       if (dnew.gt.0) then
-                            call ff_type8( i, j, ff (i, j), dnew)
-c                            write( 6, *) 'ff = ',ff(i,j)
-                            if ( ff (i, j).le.0.0d0 ) then
-                                 write(6,*)'Error ff =',ff (i, j)
-                                 stop
-                            endif
-c                       else
-c                          ff(i, j) = 0.5
-c                       endif
-                        coeff1 = cn1 / sqrt( ff (i, j) )
-c                     endif
+                        call ff_type8 (i, j, fflow, dlow)
+                        call ff_type8 (i, j, fflow, dmid)
 c      
 c ------------------ friction factor not dynamic 
 	             else
@@ -1153,6 +1152,15 @@ c
 !
 !  Need to add code here for ff_type = 8 and bisection method
 !
+c --------------------- friction factor type 8
+                   elseif (ff_type.eq.8) then
+                      call ff_type8 (i, j, fflow, dlow)
+                      call ff_type8 (i, j, fflow, dmid)
+                      cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst * 
+     &                      dlow * slope (i, j)) / fflow)) / dx))
+                      flow = dlow - cnconst * cn1 
+                      cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *  
+     &                      dmid * slope (i, j)) / ffmid)) / dx))
 	           else
                       cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *  
      &                      dlow * slope (i, j)) / ff (i, j))) / dx))
