@@ -830,8 +830,8 @@ c                      cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *
 c     &                      dmid * slope (i, j)) / ffmid)) / dx))  
 c --------------------- friction factor type 8
                      elseif (ff_type.eq.8) then
-                        call ff_type8 (i, j, fflow, dlow)
-                        call ff_type8 (i, j, ffmid, dmid)
+                        call ff_type8 (i, j, fflow, dmax1 (0.0d0, dlow))
+                        call ff_type8 (i, j, ffmid, dmax1 (0.0d0, dmid))
                         if (i.eq.47.and.j.eq.20) then
                             write (6, *) i, j, fflow, ffmid, dlow, 
      &                                   dmid, qin (1, i, j), 
@@ -911,9 +911,11 @@ c     &                      'iteration ',iteration
                 endif
                 
                 if (ff_type.gt.2) then
-	            ff (i, j) = fmid
+	            ff (i, j) = ffmid
 	        endif
 	        if (ff (i, j).lt.0.1d0) then
+                    write (6, *) "ff < 0.1 at: ", i, j, ff (i, j),
+     &                           fflow, ffmid                    
 	            ff (i, j) = 0.1d0
 	        endif
                 v (i, j) = sqrt ((gfconst * dmid * slope (i, j)) / 
