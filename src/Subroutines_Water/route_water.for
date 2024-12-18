@@ -496,12 +496,12 @@ c ------- end of loop for each cell (k)
           
  25       format('Cell (',I3,',',I3,') dold =',D18.11,' dnew =',D18.11,
      &           ' (',I2,' iterations)')          
- 50       format('q(2,',I4,',',I4,') =',D16.8, 1x, d16.8) 
+ 50       format('q (2,',I4,',',I4,') =',D16.8, 1x, d16.8) 
  51       format('Central cell: q(2,',I4,',',I4,') =',D16.8, 1x, d16.8) 
- 55       format('d(1,',I4,',',I4,') =',D16.8,' q(1,' I4,',',I4,') =',
+ 55       format('d (1,',I4,',',I4,') =',D16.8,' q(1,' I4,',',I4,') =',
      &            D16.8, 1x, d16.8)
- 56       format('qin(',I1,',',I4,',',I4,') =',D16.8, 1x, d16.8)
- 57       format('excess(',I4,',',I4,') =',D16.8, 1x, d16.8)   
+ 56       format('qin (',I1,',',I4,',',I4,') =',D16.8, 1x, d16.8)
+ 57       format('excess (',I4,',',I4,') =',D16.8, 1x, d16.8)   
           
        elseif (iroute.eq.3) then
 c
@@ -572,9 +572,9 @@ c
                 cnconst = (d (1, i, j) / dt) + ((0.5d0 / dx) *
      &                    qin (2, i, j)) + excess (i, j) -
      &                    ((0.5d0 / dx) * (q (1, i, j) - qin (1, i, j)))
-c                write(51,*) '1: cnconst =',cnconst,
-c     &                     ' old depth =',d (1, i, j),
-c     &                     ' new depth =',d (2, i, j)
+c               write (51,*) '1: cnconst =', cnconst,
+c     &                     ' old depth =', d (1, i, j),
+c     &                     ' new depth =', d (2, i, j)
                 
                 if (cnconst.gt.0.0d0) then
 c
@@ -593,13 +593,23 @@ c                         write(51,20) k, i, j, dhigh
                      endif                   
 !                     write (52, 20) k, i, j, dhigh
  20     format('cell ',I3,' position (',I3,',',I3,'), dhigh =',D15.8)
-	          elseif (cnconst.lt.0.0d0) then
+	        elseif (cnconst.lt.0.0d0) then
 c
 c                    upper and lower bound estimates for falling limb
 c
 	             dlow = 0.0d0
 	             dhigh = d (1, i, j) + excess (i, j)
-                     write(6, *) 'Error - RHS<0'
+                     write (6, *) 'Error in iroute = 5 - RHS < 0: ',
+     &                            cnconst, ', dlow = ', dlow,
+     &                            ', dmid = ', dmid,
+     &                            ', dhigh = ', dhigh
+                     write (6, *) 'fflow = ', fflow, ', ffmid = ',
+     &                            ffmid
+                     write (6, 55) i, j, d (1, i, j), i, j, 
+     &                             q (1, i, j)
+                     write (6, 56) 1, i, j, qin (1, i, j)
+                     write (6, 56) 2, i, j, qin (2, i, j)
+                     write (6, 57) i, j, excess (i, j)
                      stop
                 else
 c
@@ -772,7 +782,7 @@ c ------------------ friction factor type 6
 	                else
 	                   fflow = 16.17d0
 	                endif
-				    if (ffmid.lt.0.1d0) then
+			if (ffmid.lt.0.1d0) then
 	                   ffmid = 0.1d0
  	                endif
 	                if (remid.gt.0.0d0) then
@@ -795,15 +805,17 @@ c
 c                   ff = 1.202 Dg^1.383 Q^-0.317 
 c
 	                if (sed_propn (5, i, j).gt.0.0d0.or.
-     &                    sed_propn (6, i, j).gt.0.0d0) then
-  	                   if (sed_propn (5, i, j).gt.sed_propn (6, i, j)) 
-     &				   then
-	                      dg = 2.0d0 + 10.0d0 * (sed_propn (5, i, j) / 
-     &                           (sed_propn (5, i, j) + 
-     &                            sed_propn (6, i, j)))
-	                   else
-	                      dg = 12.0d0 + (20.0d0 * sed_propn (6, i, j))
-	                   endif
+     &                      sed_propn (6, i, j).gt.0.0d0) then
+  	                    if (sed_propn (5, i, j).gt.
+     &                            sed_propn (6, i, j)) then
+	                       dg = 2.0d0 + 10.0d0 * 
+     &                              (sed_propn (5, i, j) / 
+     &                              (sed_propn (5, i, j) + 
+     &                              sed_propn (6, i, j)))
+	                    else
+	                       dg = 12.0d0 + (20.0d0 * 
+     &                              sed_propn (6, i, j))
+	                    endif
 	                else
 	                   dg = 2.0d0
 	                endif
@@ -819,7 +831,12 @@ c     &                      dmid * slope (i, j)) / ffmid)) / dx))
 c --------------------- friction factor type 8
                      elseif (ff_type.eq.8) then
                         call ff_type8 (i, j, fflow, dlow)
-                        call ff_type8 (i, j, fflow, dmid)
+                        call ff_type8 (i, j, ffmid, dmid)
+                        if (i.eq.47.and.j.eq.20) then
+                            write (6, *) i, j, fflow, ffmid, dlow, 
+     &                                   dmid, qin (1, i, j), 
+     &                                   qin (2, i, j)
+                        endif
 c      
 c ------------------ friction factor not dynamic 
 	             else
@@ -894,11 +911,11 @@ c     &                      'iteration ',iteration
                 endif
                 
                 if (ff_type.gt.2) then
-	             ff (i, j) = fmid
-	          endif
-	          if (ff (i, j).lt.0.1d0) then
-	             ff (i, j) = 0.1d0
-	          endif
+	            ff (i, j) = fmid
+	        endif
+	        if (ff (i, j).lt.0.1d0) then
+	            ff (i, j) = 0.1d0
+	        endif
                 v (i, j) = sqrt ((gfconst * dmid * slope (i, j)) / 
      &                     ff (i, j))
                 q (2, i, j) = d (2, i, j) * v (i, j)
@@ -1155,7 +1172,7 @@ c
 c --------------------- friction factor type 8
                    elseif (ff_type.eq.8) then
                       call ff_type8 (i, j, fflow, dlow)
-                      call ff_type8 (i, j, fflow, dmid)
+                      call ff_type8 (i, j, ffmid, dmid)
                       cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst * 
      &                      dlow * slope (i, j)) / fflow)) / dx))
                       flow = dlow - cnconst * cn1 
