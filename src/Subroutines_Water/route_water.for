@@ -832,11 +832,11 @@ c --------------------- friction factor type 8
                      elseif (ff_type.eq.8) then
                         call ff_type8 (i, j, fflow, dmax1 (0.0d0, dlow))
                         call ff_type8 (i, j, ffmid, dmax1 (0.0d0, dmid))
-                        if (i.eq.47.and.j.eq.20) then
-                            write (6, *) i, j, fflow, ffmid, dlow, 
-     &                                   dmid, qin (1, i, j), 
-     &                                   qin (2, i, j)
-                        endif
+c                        if (i.eq.47.and.j.eq.20) then
+c                            write (6, *) i, j, fflow, ffmid, dlow, 
+c     &                                   dmid, qin (1, i, j), 
+c     &                                   qin (2, i, j)
+c                        endif
 c      
 c ------------------ friction factor not dynamic 
 	             else
@@ -915,7 +915,7 @@ c     &                      'iteration ',iteration
 	        endif
 	        if (ff (i, j).lt.0.1d0) then
                     write (6, *) "ff < 0.1 at: ", i, j, ff (i, j),
-     &                           fflow, ffmid                    
+     &                           fflow, ffmid, iteration                    
 	            ff (i, j) = 0.1d0
 	        endif
                 v (i, j) = sqrt ((gfconst * dmid * slope (i, j)) / 
@@ -940,7 +940,31 @@ c
                    jin = j + sdirin (l, 2)
                    if (aspect (iin, jin).eq.l.and.
      &                rmask (iin, jin).ge.0.0d0) then
-                      qin (2, i, j) = qin (2, i, j) + q (2, iin, jin)
+                      if (q (2, iin, jin).ge.0.0d0 ) then
+                         qin (2, i, j) = qin (2, i, j) + 
+     &                                   q (2, iin, jin)
+                      else
+                         write(6, *) 'Error - no +ve inflow in', 
+     &                         ' Crank-Nicolson / bisection routine'
+
+                         write(6, 60) iin, jin, q (2, iin, jin)
+                         write (6, 51) i, j, q (2, i, j)
+                         write (6, *) 'Surrounding cells:'
+                         do ll = 1, 4
+                            iin = i + sdirin (ll, 1)
+                            jin = j + sdirin (ll, 2)
+                            write (6, 50) iin, jin, q (2, iin, jin)
+                         enddo
+                         write (6, *) 'Other problem cells:'
+                         do kk = 1, ncell1   
+                            ii = order (kk, 1)
+                            jj = order (kk, 2)
+                            if (.not.(q (2, ii, jj).ge.0.0d0)) then
+                                write (6, 50) ii, jj, q (2, ii, jj)
+                            endif
+                         enddo
+                         stop
+                      endif
                    endif
                 enddo
 c
@@ -950,8 +974,8 @@ cJWFeb05  use effective depth rather than total depth to account for flow into a
 cJWFeb05  out of hollows
 c
                 effect_depth = d (1, i, j) - d_thresh (i, j)
-	          if (effect_depth.lt.0.0d0) then
-	             effect_depth = 0.0d0
+	        if (effect_depth.lt.0.0d0) then
+	            effect_depth = 0.0d0
                 endif
                 cnconst = (effect_depth / dt) + ((0.5d0 / dx) *
      &                    qin (2, i, j)) + excess (i, j) -
@@ -964,7 +988,8 @@ c  upper and lower bound estimates for rising limb
 c
 cJWFeb05	         
 	             dlow = 0.0d0
-	             dhigh = (effect_depth + excess (i, j)) * 10.0d0
+cJWDec24 changed upper limit to 100* for consistency with iroute=5                     
+	             dhigh = (effect_depth + excess (i, j)) * 100.0d0
 	          elseif (cnconst.lt.0.0d0) then
 c
 c  upper and lower bound estimates for falling limb
@@ -978,40 +1003,45 @@ c  upper and lower bound estimates for steady state
 c
                    dlow = 0.0d0
 cJWFeb05
-	             dhigh = (effect_depth + excess (i, j)) * 2.0d0
+	           dhigh = (effect_depth + excess (i, j)) * 2.0d0
                 endif
-	          dlow1 = dlow
-	          dhigh1 = dhigh
-                iteration = 1
+	        dlow1 = dlow
+	        dhigh1 = dhigh
+cJWDec24 Initialize iteration counter to zero for consistency with iroute=5 ...
+                iteration = 0
                 do while ((dhigh - dlow).gt.tol)
+cJWDec24 ... and move update to start of loop for consistency with iroute=5
+          	   iteration = iteration + 1
 cJWFeb05--------
 cJWFeb05   add in dynamic ff effects
-	             dmid = 0.5d0 * (dlow + dhigh)
+	           dmid = 0.5d0 * (dlow + dhigh)
                    if (ff_type.eq.3) then
-	                fflow = 14.d0 - 0.08d0 * dlow
-	                ffmid = 14.d0 - 0.08d0 * dmid
-	                if (fflow.lt.0.1d0) then
+	               fflow = 14.d0 - 0.08d0 * dlow
+	               ffmid = 14.d0 - 0.08d0 * dmid
+	               if (fflow.lt.0.1d0) then
 	                   fflow = 0.1d0
-	                endif
-	                if (ffmid.lt.0.1d0) then
+	               endif
+	               if (ffmid.lt.0.1d0) then
 	                   ffmid = 0.1d0
-	                endif
-                      cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst * 
-     &                      dlow * slope (i, j)) / fflow)) / dx))
-                      flow = dlow - cnconst * cn1 
-                      cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *  
-     &                      dmid * slope (i, j)) / ffmid)) / dx))
+	               endif
+                       cn1 = 1. / ((1. / dt) + 
+     &                       ((0.5d0 * sqrt ((gfconst * 
+     &                       dlow * slope (i, j)) / fflow)) / dx))
+                       flow = dlow - cnconst * cn1 
+                       cn1 = 1. / ((1. / dt) + 
+     &                       ((0.5d0 * sqrt ((gfconst *  
+     &                       dmid * slope (i, j)) / ffmid)) / dx))
 	             elseif (ff_type.eq.4) then
  	                relow = (1.d-6 * v (i, j) * dlow) / viscosity
  	                remid = (1.d-6 * v (i, j) * dmid) / viscosity
 	                if (sed_propn (5, i, j).gt.0.0d0.or.
-     &                   sed_propn (6, i, j).gt.0.0d0)
-     &                   then
+     &                      sed_propn (6, i, j).gt.0.0d0) then
 	                   if (sed_propn (5, i, j).gt.sed_propn (6, i, j))
-     &                      then
-	                      dg = 2.0d0 + 10.0d0 * (sed_propn (5, i, j) / 
-     &                           (sed_propn (5, i, j) + 
-     &                           sed_propn (6, i, j)))
+     &                        then
+	                      dg = 2.0d0 + 10.0d0 * 
+     &                             (sed_propn (5, i, j) / 
+     &                             (sed_propn (5, i, j) + 
+     &                             sed_propn (6, i, j)))
 	                   else
 	                      dg = 12.0d0 + (20.0d0 * sed_propn (6, i, j))
 	                   endif
@@ -1019,45 +1049,46 @@ cJWFeb05   add in dynamic ff effects
 	                   dg = 2.0d0
 	                endif
 	                if (pave (i, j).ge.0.0d0) then
-                         pave_perc = pave (i, j) * 1.d4 
+                           pave_perc = pave (i, j) * 1.d4 
 	                else
 	                   pave_perc = 0.0d0
 	                endif
 	                if (relow.gt.0.0d0) then
-                         fflow = 0.0796d0 * 10.0d0 ** 
-     &                           (2.4d-2 * pave_perc) *
-     &                           relow ** (-0.313d0) * dg ** 0.915d0
+                           fflow = 0.0796d0 * 10.0d0 ** 
+     &                             (2.4d-2 * pave_perc) *
+     &                             relow ** (-0.313d0) * dg ** 0.915d0
 	                else
 	                   fflow = 0.0796d0 * 10.0d0 ** 
-     &                           (2.4d-2 * pave_perc) * dg ** 0.915d0
-	                endif
-				    if (ffmid.lt.0.1d0) then
-	                   ffmid = 0.1d0
-	                endif
+     &                            (2.4d-2 * pave_perc) * dg ** 0.915d0
+	             endif
+		     if (ffmid.lt.0.1d0) then
+	                 ffmid = 0.1d0
+	             endif
 	                if (remid.gt.0.0d0) then
-                         ffmid = 0.0796d0 * 10.0d0 ** 
-     &                           (2.4d-2 * pave_perc) *
-     &                           remid ** (-0.313d0) * dg ** 0.915d0
+                           ffmid = 0.0796d0 * 10.0d0 ** 
+     &                             (2.4d-2 * pave_perc) *
+     &                             remid ** (-0.313d0) * dg ** 0.915d0
 	                else
 	                   ffmid = 0.0796d0 * 10.0d0 ** 
      &                           (2.4d-2 * pave_perc) * dg ** 0.915d0
 	                endif
-				    if (ffmid.lt.0.1d0) then
+		        if (ffmid.lt.0.1d0) then
 	                   ffmid = 0.1d0
 	                endif
-                      cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst * 
-     &                      dlow * slope (i, j)) / fflow)) / dx))
-                      flow = dlow - cnconst * cn1 
-                      cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *  
-     &                      dmid * slope (i, j)) / ffmid)) / dx))
+                        cn1 = 1. / ((1. / dt) + 
+     &                        ((0.5d0 * sqrt ((gfconst * 
+     &                        dlow * slope (i, j)) / fflow)) / dx))
+                        flow = dlow - cnconst * cn1 
+                        cn1 = 1. / ((1. / dt) + 
+     &                        ((0.5d0 * sqrt ((gfconst *  
+     &                        dmid * slope (i, j)) / ffmid)) / dx))
 	             elseif (ff_type.eq.5) then
  	                relow = (1.d-6 * v (i, j) * dlow) / viscosity
  	                remid = (1.d-6 * v (i, j) * dmid) / viscosity
 	                if (sed_propn (5, i, j).gt.0.0d0.or.
-     &                   sed_propn (6, i, j).gt.0.0d0)
-     &                   then
+     &                     sed_propn (6, i, j).gt.0.0d0) then
 	                   if (sed_propn (5, i, j).gt.sed_propn (6, i, j))
-     &                      then
+     &                         then
 	                      dg = 2.0d0 + 10.0d0 * (sed_propn (5, i, j) / 
      &                           (sed_propn (5, i, j) + 
      &                           sed_propn (6, i, j)))
@@ -1068,45 +1099,45 @@ cJWFeb05   add in dynamic ff effects
 	                   dg = 2.0d0
 	                endif
 	                if (pave (i, j).ge.0.0d0) then
-                         pave_perc = pave (i, j) * 1.d4 
+                           pave_perc = pave (i, j) * 1.d4 
 	                else
 	                   pave_perc = 0.0d0
 	                endif
 	                if (relow.gt.0.0d0) then
-                         fflow = 9.143d-6 * (relow ** (-0.307d0)) * 
+                           fflow = 9.143d-6 * (relow ** (-0.307d0)) * 
      &                            (pave_perc ** 3.470) *
      &                            (dg ** 1.025d0)
 	                else
 	                   fflow = 9.143d-6 * (pave_perc ** 3.470) *
      &                            (dg ** 1.025d0)
 	                endif
-				    if (ffmid.lt.0.1d0) then
+			if (ffmid.lt.0.1d0) then
 	                   ffmid = 0.1d0
 	                endif
 	                if (remid.gt.0.0d0) then
-                         ffmid = 9.143d-6 * (remid ** (-0.307d0)) * 
-     &                            (pave_perc ** 3.470) *
-     &                            (dg ** 1.025d0)
+                           ffmid = 9.143d-6 * (remid ** (-0.307d0)) * 
+     &                             (pave_perc ** 3.470) *
+     &                             (dg ** 1.025d0)
 	                else
 	                   ffmid = 9.143d-6 * (pave_perc ** 3.470) *
-     &                            (dg ** 1.025d0)
+     &                             (dg ** 1.025d0)
 	                endif
-				    if (ffmid.lt.0.1d0) then
+			if (ffmid.lt.0.1d0) then
 	                   ffmid = 0.1d0
 	                endif
-                      cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst * 
-     &                      dlow * slope (i, j)) / fflow)) / dx))
-                      flow = dlow - cnconst * cn1 
-                      cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *  
-     &                      dmid * slope (i, j)) / ffmid)) / dx))
+                        cn1 = 1. / ((1. / dt) + 
+     &                        ((0.5d0 * sqrt ((gfconst * 
+     &                        dlow * slope (i, j)) / fflow)) / dx))
+                        flow = dlow - cnconst * cn1 
+                        cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *  
+     &                        dmid * slope (i, j)) / ffmid)) / dx))
 	             elseif (ff_type.eq.6) then
  	                relow = (1.d-6 * v (i, j) * dlow) / viscosity
  	                remid = (1.d-6 * v (i, j) * dmid) / viscosity
 	                if (sed_propn (5, i, j).gt.0.0d0.or.
-     &                   sed_propn (6, i, j).gt.0.0d0)
-     &                   then
+     &                      sed_propn (6, i, j).gt.0.0d0) then
 	                   if (sed_propn (5, i, j).gt.sed_propn (6, i, j))
-     &                      then
+     &                         then
 	                      dg = 2.0d0 + 10.0d0 * (sed_propn (5, i, j) / 
      &                           (sed_propn (5, i, j) + 
      &                           sed_propn (6, i, j)))
@@ -1117,30 +1148,32 @@ cJWFeb05   add in dynamic ff effects
 	                   dg = 2.0d0
 	                endif
 	                if (pave (i, j).ge.0.0d0) then
-                         pave_perc = pave (i, j) * 1.d4 
+                           pave_perc = pave (i, j) * 1.d4 
 	                else
 	                   pave_perc = 0.0d0
 	                endif
 	                if (relow.gt.0.0d0) then
-                         fflow = relow ** 0.33d0
+                           fflow = relow ** 0.33d0
 	                else
 	                   fflow = 16.17
 	                endif
-				    if (ffmid.lt.0.1d0) then
+			if (ffmid.lt.0.1d0) then
 	                   ffmid = 0.1d0
 	                endif
 	                if (remid.gt.0.0d0) then
-                         ffmid = remid ** 0.33d0
+                           ffmid = remid ** 0.33d0
 	                else
 	                   ffmid = 16.17d0
 	                endif
-				    if (ffmid.lt.0.1d0) then
+			if (ffmid.lt.0.1d0) then
 	                   ffmid = 0.1d0
 	                endif
-                      cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst * 
-     &                      dlow * slope (i, j)) / fflow)) / dx))
-                      flow = dlow - cnconst * cn1 
-                      cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *  
+                        cn1 = 1. / ((1. / dt) + 
+     &                        ((0.5d0 * sqrt ((gfconst * 
+     &                        dlow * slope (i, j)) / fflow)) / dx))
+                        flow = dlow - cnconst * cn1 
+                        cn1 = 1. / ((1. / dt) + 
+     &                        ((0.5d0 * sqrt ((gfconst *  
      &                      dmid * slope (i, j)) / ffmid)) / dx))
                    elseif (ff_type.eq.7) then
 c
@@ -1173,34 +1206,34 @@ c
 !
 c --------------------- friction factor type 8
                    elseif (ff_type.eq.8) then
-                      call ff_type8 (i, j, fflow, dlow)
-                      call ff_type8 (i, j, ffmid, dmid)
+                      call ff_type8 (i, j, fflow, dmax1 (0.0d0, dlow))
+                      call ff_type8 (i, j, ffmid, dmax1 (0.0d0, dmid))
                       cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst * 
      &                      dlow * slope (i, j)) / fflow)) / dx))
                       flow = dlow - cnconst * cn1 
                       cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *  
      &                      dmid * slope (i, j)) / ffmid)) / dx))
 	           else
+c friction factor not dynamic                       
                       cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *  
      &                      dlow * slope (i, j)) / ff (i, j))) / dx))
                       flow = dlow - cnconst * cn1 
                       dmid = 0.5d0 * (dlow + dhigh)
                       cn1 = 1. / ((1. / dt) + ((0.5d0 * sqrt ((gfconst *  
      &                      dmid * slope (i, j)) / ff (i, j))) / dx))
-cJWFeb05--------
+cJWFeb05-------- end of friction factor types
                    endif
-	             fmid = dmid - cnconst * cn1
-	             if (fmid.eq.0.0d0) then
-	                exit
-	             endif
-	             if ((fmid.lt.0.0d0.and.flow.lt.0.0d0).or.
-     &	            (fmid.gt.0.0d0.and.flow.gt.0.0d0)) then
-	                dlow = dmid
-	             else
-	                dhigh = dmid
-	             endif
+	           fmid = dmid - cnconst * cn1
+	           if (fmid.eq.0.0d0) then
+	               exit
+	           endif
+	           if ((fmid.lt.0.0d0.and.flow.lt.0.0d0).or.
+     &	               (fmid.gt.0.0d0.and.flow.gt.0.0d0)) then
+	               dlow = dmid
+	           else
+	               dhigh = dmid
+	           endif
 
-          	     iteration = iteration + 1
                    if (iteration.gt.10001) then
                       write (6, *) ' CN failed to converge after 10001',
      &                     '  iterations at time ', dt * iter, ' cell ',
@@ -1214,8 +1247,8 @@ cJWFeb05
 cJWFeb05   add threshold depth back in
 cJWFeb05
                 if (ff_type.gt.2) then
-	             ff (i, j) = fmid
-	          endif
+	            ff (i, j) = ffmid
+	        endif
                 d (2, i, j) = dmid + d_thresh (i, j)
                 v (i, j) = sqrt ((gfconst * dmid * slope (i, j)) / 
      &                     ff (i, j))
@@ -1225,7 +1258,7 @@ cJWFeb05
                 q (2, i, j) = dmid * v (i, j)
                 
              endif
-		enddo
+	  enddo
 cJWFeb05----------------------------------------------<<<<<<
        elseif (iroute.eq.7) then
 cCJMHJan13

@@ -64,7 +64,7 @@
  Initial_soil_moisture_distribution: deterministic
  Saturated_soil_moisture_distribution: deterministic
  Flow_direction:            4
- flow-routing_solution_method:            2
+ flow-routing_solution_method:            6
  Friction_factor_type:            8
  Friction_factor_map:                                                                                 
  Friction factor mean: by_surface_type
