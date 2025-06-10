@@ -64,7 +64,7 @@
   <initialSoilMoistureDistribution value="deterministic" />
   <saturatedSoilMoistureDistribution value="deterministic" />
   <flow_direction value="4" />
-  <flow-routing_solution_method value="6" />
+  <flow-routing_solution_method value="5" />
   <friction_factor_type value="1" />
   <friction_factor_map value="" />
   <friction_factor_mean values="by_surface_type">
