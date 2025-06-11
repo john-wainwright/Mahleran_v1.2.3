@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mahleran_input name="Laurap1">
-  <version value="1.2.1" />
+  <version value="1.2.3" />
   <model_type value="1" />
   <runtype value="event" />
   <time_step value="1.0" />
