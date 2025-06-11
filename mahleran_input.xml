@@ -7,7 +7,7 @@
   <input_folder value=".\Input\input_p1\" />
   <output_folder value=".\Output\" />
   <dem value="p1dem.asc" />
-  <rainfall_data value="CSNV_29092022.dat" />
+  <rainfall_data value="p1_01_08_06.dat" />
   <rainfall-scaling_map value="rm_new.asc" />
   <vegetation-cover_map value="p1vegcover.asc" />
   <pavement_map value="p1pavcoverveg.asc" />
